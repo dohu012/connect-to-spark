@@ -1,0 +1,32 @@
+我先看看 reproduction/scripts/ 里现在有什么。三个文件已经就位。我逐个读取并核对。三个文件都在（注意：附录线路图的脚本实际叫 reproduce_paper_figure_a1.py，与方案里的 reproduce_paper_figure2.py 名称不同，但功能对应 Figure A1）。我逐个读取。Figure 1 脚本核对了，继续读另外两个。继续读第三个脚本（Figure A1 线路图）。三个脚本都读完了。在给结论前，我先核对一下我上一轮生成的 runbook 里引用的脚本名是否与实际文件名一致（实际附录脚本叫 reproduce_paper_figure_a1.py，而 runbook 里可能写的是 reproduce_paper_figure2.py）。三个脚本都读完了，内容与方案高度一致。但我发现 runbook 里有两处与实际情况不符，需要修正：附录脚本实际文件名是 reproduce_paper_figure_a1.py（runbook 写的是 reproduce_paper_figure2.py），且脚本已放在工作区 reproduction/scripts/（即 Spark 上的 /home/gcc/.config/unitarylab-desktop/workspaces/Default/reproduction/scripts/），runbook 默认的 SRC_BASE 却指向 ~/reproduction/scripts。我来修正。再补一处：交付阶段没收集 Figure A1 的 summary 文本。我看一下交付阶段的代码并补上。交付阶段还需要一处修正：Figure 1 脚本把实验数据写入 RESULT/figure1_runs/ 子目录，交付收集时也要从那里找 data_*.pkl。现在我已经读完三个脚本并修正了 runbook。以下是逐项核对结论。
+
+三个脚本核对结果
+1.
+reproduce_paper_figure1.py
+✅ 与方案一致
+读取 examples/20240403T212351/configs.json ✅（19 时间点、dt=0.001、nx=63 → 128 维）
+batch_size=100000 仅对 local 求解器生效 ✅
+逐时间点相对 L2：np.linalg.norm(value - reference, axis=1) / np.maximum(..., 1e-30)，再对时间点取平均 ✅（符合第 10 节定义）
+summary 格式与已验证值一致：elapsed_seconds=...、shots=20,mean_time_rl2=...、shots=1000,... ✅
+绘图时间点 [0,2,11,15,17]、ODE 用散点、量子模拟器用折线 ✅
+2.
+reproduce_paper_true_figure2.py
+✅ 与方案一致
+读取正确的归档数据 examples/20231203T101131/（非 20231202T182229）✅
+时间点 0、0.0002、0.0011、0.0015、0.0017 s（times[ti] 四位小数格式化）✅
+summary 含 ideal_1000 mean_all/max_all 和 ibm_brisbane_1000 mean_all/max_all，并额外输出 5 个选定时间点的逐点误差 ✅
+只读归档数据，不访问 IBM 云 ✅
+3.
+reproduce_paper_figure_a1.py
+✅ 与方案一致（文件名不同）
+方案里写的是 reproduce_paper_figure2.py，实际文件名是 reproduce_paper_figure_a1.py —— 纯文件名差异，功能对应论文 Figure A1，输出仍是 paper_figure2_reproduced.png（与方案第 8 节产物命名一致）
+SIMPLE_CIRCUITS=True、tomography_circuits(solver.st.get_state(0), solver.tf.h, solver.times[1:2], ...) 与方案关键代码逐字一致 ✅
+summary 输出 qubits/classical_bits/depth/operations/time/observable 六项 ✅
+对 runbook 的三处修正（已完成）
+SRC_BASE 指向修正：脚本实际在 /home/gcc/.config/unitarylab-desktop/workspaces/Default/reproduction/scripts/，runbook 现在优先用这个路径（失败才回退 ~/reproduction/scripts）。
+Figure A1 脚本名修正：reproduce_paper_figure2.py → reproduce_paper_figure_a1.py。
+交付收集修正：Figure 1 的 data_*.pkl 实际落在 figure1_exact/figure1_runs/ 子目录（脚本 data_folder=RESULT/"figure1_runs"），交付阶段现在两个位置都找。
+还差什么 / 注意事项
+仓库本体：三个脚本都依赖 simulation.experiment、utility.circuits 和 examples/ 数据，这些需要按方案第 3 节从 GitHub 检出 f64503a（或手工上传）。脚本本身我没法在本环境执行验证——本运行时没有 shell/Python 执行能力。
+冒烟脚本：runbook 的 smoke 阶段需要 \$REPO/data/smoke/smoke_test.py（或 SMOKE_SCRIPT= 指定），工作区里还没有这个文件，需要你按方案第 9 节准备。
+数据文件：Figure 2 的归档 data_0/1/2.pkl 在仓库里，随仓库检出获得；Figure 1 的 data_*.pkl 由精确实验生成。
