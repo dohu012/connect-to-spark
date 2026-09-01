@@ -1,0 +1,34 @@
+我先查看当前工作区的实际内容，确认仓库、脚本和数据是否已经就位，再决定执行路径。工作区里只有一个 algorithm_results/ 目录，我看看里面有什么，同时搜索是否存在与本复现相关的脚本或数据文件。工作区里只有过往平台算法任务的输出（algorithm_results/），并没有论文仓库、三个复现脚本或缓存数据。在给出执行方案前，我先按规范加载 quantum-skills 根技能，确认这类"定制化可复现量子代码"任务的正确做法。根技能要求先读取领域索引再动笔。这次任务的核心是"在指定模拟器/运行环境（Aer、ARM64、固定版本）上复现既定管线"，属于运行时与后端设置范畴，我先读取模拟器领域索引。模拟器索引建议本任务走 Qiskit 路径（论文仓库正是 Qiskit/Aer 管线）。我继续读取 Qiskit 子技能，确认与 Aer 运行相关的注意事项。技能链已读完。结论很明确：这次复现的执行环境（DGX Spark、conda、Qiskit 固定版本、2 小时后台任务）全部在目标机器上，而当前 CLI 工作区里既没有论文仓库，也没有三个已验证脚本（它们在你工作站的 .codex_tools/ 下），本运行时也没有 shell/git/conda/SSH 执行能力——所以我不能在这里替你完成克隆、装环境和 2 小时运行。
+
+我能做且最有价值的事：把方案第 3–12 节固化成一份可直接在 Spark 上执行的 runbook（含阶段化、幂等补丁、nohup 启动、交付收集），并写好环境验证脚本。现在开始创建这些文件。runbook 已写入。接着写环境验证脚本（方案第 4 节内容 + 硬件信息，供交付包使用）。verify_env.py 的写入因审批超时未完成。为了让已交付的 runbook 不依赖这个文件，我把环境验证逻辑内联进 runbook（脚本存在则用脚本，不存在则用内置等价代码），保证拿到 Spark 上就能跑。再把交付阶段的环境报告来源同步改为兼容两种位置。最后补一份交付说明 README，把使用步骤、前置输入、成功标准和本工作区的诚实边界写清楚。三个文件都已就位。我快速回读一遍 runbook，确认两次编辑后的脚本结构完整、没有语法断点。回读确认 runbook 结构完整。下面是本次交付的总结。
+
+现状核查（如实说明）
+当前 CLI 工作区里只有过往平台任务的输出（algorithm_results/），没有论文仓库、没有三个已验证脚本（它们在你工作站的 .codex_tools/ 下），也没有缓存数据。
+本运行时没有 shell / git / conda / SSH 执行能力，无法在这里克隆仓库、建环境或跑 2 小时 22 分的 Figure 1 任务。这些步骤必须在 DGX Spark 上完成。
+工作区自带的算法/PDE 运行器也无法表达这条管线（作者仓库的 Qiskit + Aer + CVXPY 层析拟合流程），所以正确路径就是按你的方案在 Spark 上跑仓库代码——而不是用平台算法做"替代演示"。
+我实际交付了什么
+文件	内容
+reproduction/run_reproduction.sh	把方案第 3–12 节固化为阶段化 runbook：fetch（克隆并校验提交号 f64503a，含手工上传回退）→ env（conda + 固定版本 pip + 环境验证）→ patch（max_workers=1 幂等补丁，保存 diff）→ smoke（7-grid 冒烟门槛）→ fig1（nohup 后台启动 + PID 保存 + 监控提示）→ fig2 → figa1 → deliver（按第 12 节清单收集交付包，含硬件信息）
+reproduction/README.md	使用步骤、成功标准对照表、已知边界（含方案第 11 节故障处理的内置提示）
+两点说明：
+
+verify_env.py 的写入因审批超时未落盘，我已把等价的环境验证代码内联进 runbook（verify_env.py 存在则优先使用），不影响使用。
+这些文件只经人工审查、未实际执行——本环境无法运行 bash；首次在 Spark 上执行时请以日志为准。
+你在 Spark 上要做的（最小动作）
+bash
+复制
+# 1. 把三个已验证脚本拷到 Spark：~/reproduction/scripts/
+#    （reproduce_paper_figure1.py / reproduce_paper_true_figure2.py / reproduce_paper_figure2.py）
+#    冒烟脚本放到 $REPO/data/smoke/smoke_test.py（或用 SMOKE_SCRIPT=... 指定）
+
+# 2. 运行
+bash reproduction/run_reproduction.sh        # 自动完成第 3–5 节 → 冒烟 → fig1(后台) → fig2 → figA1
+
+# 3. Figure 1 跑完后
+STAGE=deliver bash reproduction/run_reproduction.sh   # 收集第 12 节交付包
+方案中容易踩的点（Jobs completed: 0 | 1 属正常、ModuleNotFoundError: simulation、Times New Roman 回退、OOM 只杀本实验 PID）都已内置到 runbook 的输出提示里，与方案第 11 节一致。
+
+一个可选的加分步骤
+如果你愿意把仓库（或关键文件）和三个脚本放进这个工作区，我可以在 2 小时运行之前帮你做一致性审查：核对时间点索引 [0,2,11,15,17]、batch_size=100000、相对 L2 误差定义（逐时间点平均而非展平）、SIMPLE_CIRCUITS 与 max_workers=1 补丁是否与方案第 8、10 节完全一致——这是我在本环境里唯一能真正"跑"的验证。
+
+需要我现在就开始审查吗？如果需要，请把仓库和脚本放到工作区（例如 reproduction/repo/ 与 reproduction/scripts/），我读取后给出核对结论。
