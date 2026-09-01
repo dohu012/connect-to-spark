@@ -1,0 +1,18 @@
+# Credentials and local secrets
+*密钥*
+*password*
+*.pem
+*.key
+.env
+
+# Large/generated experiment artifacts
+*.pkl
+*.log
+*.png
+.codex_cache/
+data/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
