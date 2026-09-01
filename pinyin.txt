@@ -1,0 +1,96 @@
+gcc@spark-0ffe:~/downlown/test$ which fcitx5
+/usr/bin/fcitx5
+gcc@spark-0ffe:~/downlown/test$ which ficitx
+gcc@spark-0ffe:~/downlown/test$ which fcitx
+gcc@spark-0ffe:~/downlown/test$ which ibus
+/usr/bin/ibus
+gcc@spark-0ffe:~/downlown/test$ fcitx5 --version
+5.1.7
+gcc@spark-0ffe:~/downlown/test$ ibus version
+IBus 1.5.29-rc2
+gcc@spark-0ffe:~/downlown/test$ fcitx5-diagnose | grep -Ei "pinyin|chinese|addon|input method" | head -50
+    **Please set environment variable XMODIFIERS to "@im=fcitx" using the tool your distribution provides or add `export XMODIFIERS=@im=fcitx` to your `~/.xprofile`. See [Input Method Related Environment Variables: XMODIFIERS](http://fcitx-im.org/wiki/Input_method_related_environment_variables#XMODIFIERS).**
+    **If you are using `gnome>=3.6`, you may want to uninstall `ibus` or remove `ibus-daemon` in order to use any input method other than `ibus`. See [Note for GNOME Later than 3.6](http://fcitx-im.org/wiki/Note_for_GNOME_Later_than_3.6) for more detail as well as alternative solutions.**
+    **Please set environment variable QT_IM_MODULE to "fcitx" using the tool your distribution provides or add `export QT_IM_MODULE=fcitx` to your `~/.xprofile`. See [Input Method Related Environment Variables: QT_IM_MODULE](http://fcitx-im.org/wiki/Input_method_related_environment_variables#QT_IM_MODULE).**
+    **Please set environment variable QT_IM_MODULE to "fcitx" using the tool your distribution provides or add `export QT_IM_MODULE=fcitx` to your `~/.xprofile`. See [Input Method Related Environment Variables: QT_IM_MODULE](http://fcitx-im.org/wiki/Input_method_related_environment_variables#QT_IM_MODULE).**
+    **Please set environment variable QT_IM_MODULE to "fcitx" using the tool your distribution provides or add `export QT_IM_MODULE=fcitx` to your `~/.xprofile`. See [Input Method Related Environment Variables: QT_IM_MODULE](http://fcitx-im.org/wiki/Input_method_related_environment_variables#QT_IM_MODULE).**
+    **Cannot find fcitx5 input method module for Qt4.**
+    **Please set environment variable GTK_IM_MODULE to "fcitx" using the tool your distribution provides or add `export GTK_IM_MODULE=fcitx` to your `~/.xprofile`. See [Input Method Related Environment Variables: GTK_IM_MODULE](http://fcitx-im.org/wiki/Input_method_related_environment_variables#GTK_IM_MODULE).**
+            "fcitx" "Fcitx5 (Flexible Input Method Framework5)" "fcitx5" "/usr/locale" "ja:ko:zh:*" 
+            "fcitx5" "Fcitx5 (Flexible Input Method Framework5)" "fcitx5" "/usr/locale" "ja:ko:zh:*" 
+## Fcitx Addons:
+1.  Addon Config Dir:
+    Found fcitx5 addon config directory: `/usr/share/fcitx5/addon`.
+2.  Addon List:
+    1.  Found 29 enabled addons:
+            Simplified and Traditional Chinese Translation 5.1.3
+            Cloud Pinyin 5.1.3
+            Input method selector 5.1.7
+            KDE Input Method Panel 5.1.7
+            Lua Addon Loader 5.0.12
+            Pinyin 5.1.3
+            Extra Pinyin functionality 5.1.3
+            Wayland Input method frontend 5.1.7
+            X Input Method Frontend 5.1.7
+    2.  Found 0 disabled addons:
+3.  Addon Libraries:
+    All libraries for all addons are found.
+    Found 3 enabled user interface addons:
+        KDE Input Method Panel
+## Input Methods:
+gcc@spark-0ffe:~/downlown/test$ fcitx5-configtool
+I2026-09-01 15:48:38.600582 instance.cpp:1346] Override Enabled Addons: {}
+I2026-09-01 15:48:38.600619 instance.cpp:1347] Override Disabled Addons: {}
+E2026-09-01 15:48:38.603689 waylandmodule.cpp:230] Failed to open wayland connection
+I2026-09-01 15:48:38.603709 addonmanager.cpp:195] Loaded addon wayland
+I2026-09-01 15:48:38.607033 xcbconnection.cpp:189] Connecting to X11 display, display name::0.
+I2026-09-01 15:48:38.607876 addonmanager.cpp:195] Loaded addon xcb
+I2026-09-01 15:48:38.610618 addonmanager.cpp:195] Loaded addon quickphrase
+I2026-09-01 15:48:38.611728 addonmanager.cpp:195] Loaded addon clipboard
+I2026-09-01 15:48:38.612267 addonmanager.cpp:195] Loaded addon unicode
+I2026-09-01 15:48:38.612420 addonmanager.cpp:195] Loaded addon imselector
+I2026-09-01 15:48:38.617244 addonmanager.cpp:195] Loaded addon keyboard
+I2026-09-01 15:48:38.617733 addonmanager.cpp:195] Loaded addon waylandim
+I2026-09-01 15:48:38.619619 addonmanager.cpp:195] Loaded addon luaaddonloader
+I2026-09-01 15:48:38.620849 addonmanager.cpp:195] Loaded addon pinyinhelper
+I2026-09-01 15:48:38.622946 addonmanager.cpp:195] Loaded addon dbus
+I2026-09-01 15:48:38.627651 addonmanager.cpp:195] Loaded addon fcitx4frontend
+I2026-09-01 15:48:38.629509 addonmanager.cpp:195] Loaded addon imeapi
+I2026-09-01 15:48:38.630965 addonmanager.cpp:195] Loaded addon ibusfrontend
+E2026-09-01 15:48:38.631558 xim.cpp:137] Failed to open xim, retrying.
+E2026-09-01 15:48:39.632669 xim.cpp:137] Failed to open xim, retrying.
+E2026-09-01 15:48:40.635085 xim.cpp:137] Failed to open xim, retrying.
+I2026-09-01 15:48:41.635219 addonmanager.cpp:195] Loaded addon xim
+I2026-09-01 15:48:41.646065 addonmanager.cpp:195] Loaded addon dbusfrontend
+I2026-09-01 15:48:41.678820 inputmethodmanager.cpp:190] Found 737 input method(s) in addon keyboard
+I2026-09-01 15:48:41.678975 inputmethodmanager.cpp:117] No valid input method group in configuration. Building a default one
+I2026-09-01 15:48:41.679607 instance.cpp:371] Items in Group 1: [InputMethodGroupItem(keyboard-us,layout=)]
+I2026-09-01 15:48:41.679623 instance.cpp:371] Items in Group 2: [InputMethodGroupItem(keyboard-cn,layout=)]
+I2026-09-01 15:48:41.679633 instance.cpp:376] Generated groups: [Group 1, Group 2]
+I2026-09-01 15:48:41.692749 addonmanager.cpp:195] Loaded addon kimpanel
+I2026-09-01 15:48:41.692963 addonmanager.cpp:195] Loaded addon virtualkeyboard
+I2026-09-01 15:48:41.723334 classicui.cpp:66] Created classicui for x11 display::0
+I2026-09-01 15:48:41.723391 addonmanager.cpp:195] Loaded addon classicui
+I2026-09-01 15:48:41.724287 addonmanager.cpp:195] Loaded addon notificationitem
+I2026-09-01 15:48:41.724740 addonmanager.cpp:195] Loaded addon notifications
+I2026-09-01 15:48:41.729448 kimpanel.cpp:116] Kimpanel new owner: 
+I2026-09-01 15:48:41.729462 virtualkeyboard.cpp:223] VirtualKeyboard new owner: 
+I2026-09-01 15:48:41.729482 portalsettingmonitor.cpp:91] A new portal show up, start a new query.
+E2026-09-01 15:48:41.732542 portalsettingmonitor.cpp:115] DBus call error: org.freedesktop.portal.Error.NotFound Requested setting not found
+fcitx5-config: IMPage changed
+fcitx5-config: IMPage changed
+gcc@spark-0ffe:~/downlown/test$ ls /user/share/fcitx5/inputmethod/ | grep -Ei 'pinyin|chinese'
+ls: cannot access '/user/share/fcitx5/inputmethod/': No such file or directory
+gcc@spark-0ffe:~/downlown/test$ ps aux | grep -E \[f]citx5[i]bus'
+> ^C
+gcc@spark-0ffe:~/downlown/test$ ls /user/share/fcitx5
+ls: cannot access '/user/share/fcitx5': No such file or directory
+gcc@spark-0ffe:~/downlown/test$ ps aux | grep fcitx5
+gcc        14056  0.0  0.0 296128 37296 ?        Sl   15:48   0:00 /usr/bin/fcitx5
+gcc        15110  0.0  0.0  19808  2132 pts/0    S+   15:57   0:00 grep --color=auto fcitx5
+gcc@spark-0ffe:~/downlown/test$ ps aux | grep ibus
+gcc        15114  0.0  0.0  19808  2132 pts/0    S+   15:57   0:00 grep --color=auto ibus
+gcc@spark-0ffe:~/downlown/test$ ibus list-engine
+
+(ibus list-engine:15130): IBUS-WARNING **: 15:58:01.464: ibus_bus_call_sync: org.freedesktop.DBus.Properties.Get: GDBus.Error:org.freedesktop.DBus.Error.UnknownProperty: Unknown interface org.freedesktop.IBus or property Engines.
+
